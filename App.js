@@ -16,7 +16,7 @@ import Loader from './src/components/Loader';
 const App = () => {
   return (
     <StoreProvider>
-      < Nav />
+      <Nav />
       <Loader />
     </StoreProvider>
   )

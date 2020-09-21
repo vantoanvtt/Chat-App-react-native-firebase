@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Store} from '../../context/store/index';
 import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
 const Tabs = createBottomTabNavigator();
 
@@ -19,13 +20,9 @@ const Dashboard = ({route}) => {
     const {dispatchLoaderAction} = loaderValue;
     const {dispatchCurrentUser} = UserValue;
 
-    var users = []
-    var currentUser = {
-        id: "",
-        name: "",
-        profileImg: ""
-    }
-
+    const currentUser = auth().currentUser;
+    console.log('----------- currentUser -----------', currentUser);
+    
     useEffect(() => {
        /*  dispatchLoaderAction({
             type: LOADING_START
@@ -33,22 +30,42 @@ const Dashboard = ({route}) => {
         try {
             database()
             .ref("users")
-            .then((dataSnapshot) => {
-                console.log(dataSnapshot.val());
-                
-                /* dataSnapshot.forEach((element) => {
-                    if(route.uuid == element.val().uuid) {
-                        currentUser.id = element.val().uuid
-                        currentUser.name = element.val().name
-                        currentUser.profileImg = element.val().profileImg
-                    } else {
-                        users.push({
-                            id: element.val().uuid,
-                            name: element.val().name,
-                            profileImg: element.val().profileImg
-                        })
-                    }
-                }); */
+            .orderByKey()
+            .limitToFirst(10)
+            .once('value')
+            .then((snapshot) => {
+                // console.log('----------------- vvvvv ------------------', snapshot.val());
+                const users = Object.values(snapshot.val());
+                console.log('----------------- vvvvv ------------------', users);
+
+                // users.forEach((element) => {
+
+                /*
+                    currentUser lất từ database ra, sao phải so sánh làm gì ??
+                */
+            
+                //     if(route.uuid == element.uuid) {
+                //         currentUser.id = element.uuid
+                //         currentUser.name = element.name
+                //         currentUser.profileImg = element.profileImg
+                //     } else {
+
+                /*
+                    Mục đích tạo thêm một array mới để làm gì nhỉ ???
+                    Mảng user query trực tiếp từ database luôn, khởi tạo thêm state để lưu trữ mảng users là không cần thiết (không làm như vậy -> trừ khi có ý đồ riêng đặc biệt nào đó).
+
+                    Xem tài liệu:
+                    https://rnfirebase.io/reference/database/query
+                    https://rnfirebase.io/reference/database/reference
+                */
+
+                //         users.push({
+                //             id: element.uuid,
+                //             name: element.name,
+                //             profileImg: element.profileImg
+                //         })
+                //     }
+                // });
 
                 /* dispatchCurrentUser({
                     type: USER_LOGIN,
@@ -64,12 +81,12 @@ const Dashboard = ({route}) => {
                 }) */
             })
         } catch (err){
-            console.log(err)
+            console.log('------ error -----', err)
             /* dispatchLoaderAction({
                 type: LOADING_STOP,
               }); */
         }
-    })
+    }, []);
 
 
     return (
@@ -111,3 +128,7 @@ const Dashboard = ({route}) => {
 }
 
 export default Dashboard;
+
+/*
+    Nhiều bug quá -_-
+*/
