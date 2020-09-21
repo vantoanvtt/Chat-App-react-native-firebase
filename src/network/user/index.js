@@ -1,15 +1,13 @@
 import database from '@react-native-firebase/database';
 
-export const AddUser = async (name, email, uid, profileImg) => {
+export const AddUser = async (name, email) => {
   try {
     return await 
       database()
-      .ref("users/" + uid)
+      .ref().child('users')
       .set({
         name: name,
         email: email,
-        uuid: uid,
-        profileImg: profileImg,
       });
   } catch (error) {
     return error;

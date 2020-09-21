@@ -45,8 +45,11 @@ const SignUp = ({navigation}) => {
                 type: LOADING_START
             })
 
-            let uid = auth().currentUser.uid;
-            let profileImg = "";
+            // Tạo tài khoản mới thì lấy đâu ra uid ???
+            // uid là tự động -> không được truyền lên.
+            // let uid = auth().currentUser.uid;
+
+
             SignUpRequest(email,password)
             .then( (res) => {
                 if (!res.additionalUserInfo) {
@@ -56,7 +59,7 @@ const SignUp = ({navigation}) => {
                     alert(res);
                     return;
                   }
-                AddUser(name,email,uid,profileImg) 
+                AddUser(name, email) 
                 dispatchLoaderAction({
                     type: LOADING_STOP
                 })
