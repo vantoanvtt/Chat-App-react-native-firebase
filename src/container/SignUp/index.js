@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {View, Text, StyleSheet, KeyboardAvoidingView} from 'react-native';
-import {Button, Input, Logo} from '../../components/index';
+import {Button, InputName, InputPassword, Logo} from '../../components/index';
 import {SignUpRequest, AddUser} from '../../network/index';
 import auth from '@react-native-firebase/auth';
 import {Store} from '../../context/store';
@@ -71,10 +71,10 @@ const SignUp = ({navigation}) => {
             <SafeAreaView>
                 <View style={styles.container}>
                     <Logo width={140} height={230}  />
-                    <Input placeholder='Name' onChangeText={(text) => handOnChange("name",text)} />
-                    <Input placeholder='Enter Email' onChangeText={(text) => handOnChange("email",text)} />
-                    <Input placeholder='Enter Password' onChangeText={(text) => handOnChange("password",text)} />
-                    <Input placeholder='Confirm Password' onChangeText={(text) => handOnChange("confirmPassword",text)} />
+                    <InputName placeholder='Name' onChangeText={(text) => handOnChange("name",text)} />
+                    <InputName placeholder='Enter Email' onChangeText={(text) => handOnChange("email",text)} />
+                    <InputPassword placeholder='Password' onChangeText={(text) => handOnChange("password",text)} />
+                    <InputPassword placeholder='Confirm Password' onChangeText={(text) => handOnChange("confirmPassword",text)} />
                     <Button title='SIGN UP' onPress={() => onSignUpPress()} />
                 </View>
             </SafeAreaView>

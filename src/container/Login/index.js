@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import {View, Text, StyleSheet, Keyboard, KeyboardAvoidingView} from 'react-native';
 
-import {Button, Input, Logo} from '../../components/index';
+import {Button, InputName, InputPassword, Logo} from '../../components/index';
 import {LoginRequest} from '../../network/index';
 import {Store} from '../../context/store';
 import {LOADING_START, LOADING_STOP} from '../../context/actions/type';
@@ -78,8 +78,8 @@ const Login = ({navigation}) => {
             <SafeAreaView>
                 <View style={styles.container}>
                     <Logo width={140} height={230}  />
-                    <Input placeholder='Enter Email' onChangeText={(text) => handleOnChange("email",text)}/>
-                    <Input placeholder='Enter Password' onChangeText={(text) => handleOnChange("password",text)}/>
+                    <InputName placeholder='Email' onChangeText={(text) => handleOnChange("email",text)}/>
+                    <InputPassword placeholder='Password' onChangeText={(text) => handleOnChange("password",text)}/>
                     <Button title="Login" onPress={() => {onLoginPress()}} />
                     <Button title='SIGN UP' onPress={() => {navigation.navigate('SignUp')}} />
                 </View>

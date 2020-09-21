@@ -19,21 +19,24 @@ const Dashboard = ({route}) => {
     const {dispatchLoaderAction} = loaderValue;
     const {dispatchCurrentUser} = UserValue;
 
+    var users = []
+    var currentUser = {
+        id: "",
+        name: "",
+        profileImg: ""
+    }
+
     useEffect(() => {
-        dispatchLoaderAction({
+       /*  dispatchLoaderAction({
             type: LOADING_START
-        })
+        }) */
         try {
             database()
             .ref("users")
-            .on("value", (dataSnapshot) => {
-                let users = []
-                let currentUser = {
-                    id: "",
-                    name: "",
-                    profileImg: ""
-                }
-                dataSnapshot.forEach((element) => {
+            .then((dataSnapshot) => {
+                console.log(dataSnapshot.val());
+                
+                /* dataSnapshot.forEach((element) => {
                     if(route.uuid == element.val().uuid) {
                         currentUser.id = element.val().uuid
                         currentUser.name = element.val().name
@@ -45,7 +48,7 @@ const Dashboard = ({route}) => {
                             profileImg: element.val().profileImg
                         })
                     }
-                });
+                }); */
 
                 /* dispatchCurrentUser({
                     type: USER_LOGIN,
@@ -56,15 +59,15 @@ const Dashboard = ({route}) => {
                     type: FETCH_FRIENDS_REQUEST,
                     payload: users
                 }) */
-                dispatchLoaderAction({
+                /* dispatchLoaderAction({
                     type: LOADING_STOP
-                })
+                }) */
             })
         } catch (err){
             console.log(err)
-            dispatchLoaderAction({
+            /* dispatchLoaderAction({
                 type: LOADING_STOP,
-              });
+              }); */
         }
     })
 
