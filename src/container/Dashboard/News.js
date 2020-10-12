@@ -12,7 +12,7 @@ const News = () => {
     return (
         <View>
             <Text>
-                Chat
+                NEWSSS
             </Text>
         </View>
     )

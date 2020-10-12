@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {Store} from '../../context/store/index';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Tabs = createBottomTabNavigator();
 
@@ -21,70 +22,49 @@ const Dashboard = ({route}) => {
     const {dispatchCurrentUser} = UserValue;
 
     const currentUser = auth().currentUser;
-    console.log('----------- currentUser -----------', currentUser);
+    //console.log('----------- currentUser -----------', currentUser);
     
     useEffect(() => {
-       /*  dispatchLoaderAction({
+        dispatchLoaderAction({
             type: LOADING_START
-        }) */
+        })
         try {
             database()
-            .ref("users")
-            .orderByKey()
-            .limitToFirst(10)
+            .ref('users/'+ currentUser.uid)
             .once('value')
-            .then((snapshot) => {
-                // console.log('----------------- vvvvv ------------------', snapshot.val());
-                const users = Object.values(snapshot.val());
-                console.log('----------------- vvvvv ------------------', users);
-
-                // users.forEach((element) => {
-
-                /*
-                    currentUser lất từ database ra, sao phải so sánh làm gì ??
-                */
-            
-                //     if(route.uuid == element.uuid) {
-                //         currentUser.id = element.uuid
-                //         currentUser.name = element.name
-                //         currentUser.profileImg = element.profileImg
-                //     } else {
-
-                /*
-                    Mục đích tạo thêm một array mới để làm gì nhỉ ???
-                    Mảng user query trực tiếp từ database luôn, khởi tạo thêm state để lưu trữ mảng users là không cần thiết (không làm như vậy -> trừ khi có ý đồ riêng đặc biệt nào đó).
-
-                    Xem tài liệu:
-                    https://rnfirebase.io/reference/database/query
-                    https://rnfirebase.io/reference/database/reference
-                */
-
-                //         users.push({
-                //             id: element.uuid,
-                //             name: element.name,
-                //             profileImg: element.profileImg
-                //         })
-                //     }
-                // });
-
-                /* dispatchCurrentUser({
-                    type: USER_LOGIN,
-                    payload: currentUser
-                })
-                console.log("user" + currentUser);
+            .then(snapshot1 => {
+                console.log('currUser data dashboard: ', snapshot1.val());
+                let currentUserdt = snapshot1.val();
                 dispatchCurrentUser({
-                    type: FETCH_FRIENDS_REQUEST,
-                    payload: users
-                }) */
-                /* dispatchLoaderAction({
-                    type: LOADING_STOP
-                }) */
+                    type: USER_LOGIN,
+                    payload: currentUserdt
+                })
+            }).then(() => {
+                database()
+                .ref("users")
+                .orderByKey()
+                .limitToFirst(10)
+                .once('value')
+                .then((snapshot) => {
+                    ///console.log('----------------- vvvvv ------------------', snapshot.val());
+                    const users = Object.values(snapshot.val());
+
+                    dispatchCurrentUser({
+                        type: FETCH_FRIENDS_REQUEST,
+                        payload: users
+                    })
+                    dispatchLoaderAction({
+                        type: LOADING_STOP
+                    })
+                })
             })
+
+            
         } catch (err){
             console.log('------ error -----', err)
-            /* dispatchLoaderAction({
+            dispatchLoaderAction({
                 type: LOADING_STOP,
-              }); */
+              });
         }
     }, []);
 
@@ -94,7 +74,7 @@ const Dashboard = ({route}) => {
             screenOptions = {({route}) =>  ({
                 tabBarIcon: () => {
                     switch(route.name) {
-                        case "chat": {
+                        case "Chat": {
                             return <Icon name="wechat" size={30} color="#a7b1c2" /> ;
                         }
                         case "Group": {
@@ -111,21 +91,26 @@ const Dashboard = ({route}) => {
             })}
 
             tabBarOptions={{
-                activeTintColor: '#085dd4',
+                activeTintColor: '#383ca6',
                 inactiveTintColor: '#59554a',
                 showIcon: true,
                 showLabel: false
               }} 
             
         >
-            <Tabs.Screen name="Chat" component={Chat} />
+            
+            
             <Tabs.Screen name="Group" component={Group} />
             <Tabs.Screen name="News" component={News} />
             <Tabs.Screen name="Profile" component={Profile} />
+            <Tabs.Screen name="Chat" component={Chat} />
+            
+            
         </Tabs.Navigator>
     )
 
 }
+//
 
 export default Dashboard;
 

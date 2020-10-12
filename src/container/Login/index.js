@@ -7,13 +7,12 @@ import {Store} from '../../context/store';
 import {LOADING_START, LOADING_STOP} from '../../context/actions/type';
 import {setAsyncStorage,keys} from '../../asyncStorage/index';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { auth } from 'firebase';
 
 const Login = ({navigation}) => {
 
     const {loaderValue} = useContext(Store);
     const { dispatchLoaderAction } = loaderValue;
-    const [uuid, setUuid] = useState("")
-
     const [account,setAccount] = useState({
         email: "",
         password: ""
@@ -54,13 +53,20 @@ const Login = ({navigation}) => {
                     alert(res)
                     return;
                 }
+
+                console.log("--------new user login-------------", res)
+
+                //let curr = auth().currentUser;
+                //console.log("currrrrrrrr had just login====", curr)
+                
                 setAsyncStorage(keys.uuid, res.user.uid)
-                setUuid(res.user.uuid)
+            })
+            .then(() => {
                 dispatchLoaderAction({
                     type: LOADING_STOP,
                 })
                 setInitialState();
-                navigation.replace("Dashboard", {uuid: uuid})
+                navigation.replace("Dashboard")
             })
             .catch((err) => {
                 dispatchLoaderAction({
@@ -70,6 +76,7 @@ const Login = ({navigation}) => {
             })
             
         }
+        
             
     }
 

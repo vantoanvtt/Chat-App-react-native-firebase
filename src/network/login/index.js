@@ -3,7 +3,7 @@ import auth from '@react-native-firebase/auth';
 
 const LoginRequest = async(email,password) => {
     try {
-        return await auth().signInWithEmailAndPassword(email,password);
+        return await auth().signInWithEmailAndPassword(email,password)
     }
     catch(error) {
         console.log(error);

@@ -12,7 +12,7 @@ const Group = () => {
     return (
         <View>
             <Text>
-                Chat
+                Groupssss
             </Text>
         </View>
     )

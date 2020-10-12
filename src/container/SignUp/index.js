@@ -47,24 +47,27 @@ const SignUp = ({navigation}) => {
 
             // Tạo tài khoản mới thì lấy đâu ra uid ???
             // uid là tự động -> không được truyền lên.
-            // let uid = auth().currentUser.uid;
+            
 
 
             SignUpRequest(email,password)
-            .then( (res) => {
-                if (!res.additionalUserInfo) {
-                    dispatchLoaderAction({
-                      type: LOADING_STOP,
-                    });
-                    alert(res);
-                    return;
-                  }
-                AddUser(name, email) 
+            .then(() => {
+                let id = auth().currentUser.uid;
+                let srcImg = {uri: "https://thumbs.dreamstime.com/z/businessman-avatar-profile-picture-36775850.jpg"};
+                console.log("-------ID----------", id)
+                AddUser(name, email,id, srcImg)
+            })
+            .then(() => {
                 dispatchLoaderAction({
                     type: LOADING_STOP
                 })
                 navigation.replace("Dashboard")
             })
+            .catch((err) => {
+                console.log(err)
+                throw err;
+            })
+            
            
         }
     }
